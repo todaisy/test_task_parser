@@ -16,8 +16,8 @@ class HtmlParserTask(app.Task):
         links = parser_html(url)
 
         for link in links:
-            # app.send_task('xml_parser', args=[link])  # для redis
             app.tasks['xml_parser'].apply(args=[link])
+
 
 class XmlParserTask(app.Task):
     name = 'xml_parser'
@@ -30,7 +30,7 @@ app.register_task(HtmlParserTask())
 app.register_task(XmlParserTask())
 
 
-HtmlParserTask().apply_async(args=('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=1',))
-HtmlParserTask().apply_async(args=('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=2',))
+app.tasks['html_parser'].delay('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=1')
+app.tasks['html_parser'].delay('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=2')
 
 # celery -A main worker --loglevel=info
