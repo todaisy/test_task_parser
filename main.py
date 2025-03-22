@@ -16,8 +16,8 @@ class HtmlParserTask(app.Task):
         links = parser_html(url)
 
         for link in links:
-            app.send_task('xml_parser', args=[link])  # для redis
-            #  app.tasks['xml_parser'].apply(args=[link])  # для task_always_eager=True
+            app.send_task('xml_parser', args=[link])  # for redis, asynchronous
+            #  app.tasks['xml_parser'].apply(args=[link])  # for task_always_eager=True, synchronous
 
 
 class XmlParserTask(app.Task):
