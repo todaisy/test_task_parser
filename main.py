@@ -31,7 +31,12 @@ app.register_task(HtmlParserTask())
 app.register_task(XmlParserTask())
 
 
-app.tasks['html_parser'].delay('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=1')
-app.tasks['html_parser'].delay('https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=2')
+if __name__ == '__main__':
+    urls = [
+        'https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=1',
+        'https://zakupki.gov.ru/epz/order/extendedsearch/results.html?fz44=on&pageNumber=2'
+    ]
+    for url in urls:
+        app.tasks['html_parser'].delay(url)
 
 # celery -A main worker --loglevel=info
