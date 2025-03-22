@@ -4,7 +4,7 @@ from parser import parser_html, parser_xml
 app = Celery('tasks', broker='redis://localhost:6379/0')
 
 app.conf.update(
-    task_always_eager=True,
+    task_always_eager=False,
     task_eager_propagates=True
 )
 
@@ -16,7 +16,8 @@ class HtmlParserTask(app.Task):
         links = parser_html(url)
 
         for link in links:
-            app.tasks['xml_parser'].apply(args=[link])
+            app.send_task('xml_parser', args=[link])  # для redis
+            #  app.tasks['xml_parser'].apply(args=[link])  # для task_always_eager=True
 
 
 class XmlParserTask(app.Task):
